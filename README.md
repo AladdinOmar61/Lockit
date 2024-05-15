@@ -21,7 +21,7 @@ safe as soon as possible!
 --------------------
 
 ## Technologies that will be used
-* React
+* React native/Expo
 * Typescript
 * UI kit tbd
 * Supabase backend
