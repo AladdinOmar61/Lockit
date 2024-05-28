@@ -15,6 +15,11 @@ export default function RootLayout() {
           color: 'white', fontFamily: 'IBM Plex Mono'
         }
       }} />
+      <Stack.Screen name="takepicture" options={{
+        headerTitle: "Take a Picture", headerTintColor: 'white', statusBarColor: "#3B3C59", headerStyle: { backgroundColor: "#3B3C59" }, headerTitleStyle: {
+          color: 'white', fontFamily: 'IBM Plex Mono'
+        }
+      }} />
     </Stack>
   );
 }

@@ -36,7 +36,7 @@ export default function Index() {
         >
             <Text style={[styles.lockitFont, { fontSize: 45, position: 'absolute', top: 100 }]}>Lock-it</Text>
             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: "space-around" }}>
-                <Link href="/mylocks" asChild style={styles.box}>
+                <Link href="/takepicture" asChild style={styles.box}>
                     <Pressable style={{ borderWidth: 3, borderColor: "#5864A6", padding: 10, backgroundColor: "#3B3C59" }}>
                         <View style={{ display: 'flex', alignItems: 'center' }}>
                             <Text style={[styles.lockitFont, { marginTop: 15 }]}>Take picture</Text>
