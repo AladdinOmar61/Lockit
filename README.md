@@ -23,4 +23,5 @@ safe as soon as possible!
 ## Technologies that will be used
 * React native/Expo
 * Typescript
+* Tensorflow js
 * Python backend
