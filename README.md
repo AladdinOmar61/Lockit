@@ -1,4 +1,4 @@
-# Locked
+# Lockit
 This app will help you keep track of your locks, combinations, and keys to locks
 
 Ever have an old lock that you havent used in a while and want to remember what combination it
