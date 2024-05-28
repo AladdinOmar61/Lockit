@@ -1,22 +1,19 @@
-import { Text, View, StyleSheet, ScrollView, Dimensions, FlatList } from "react-native";
+import { Text, View, StyleSheet, Pressable, Dimensions, FlatList } from "react-native";
+import { Link } from 'expo-router';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 export default function MylocksScreen() {
 
-    const hardcodedLocks = [{ name: "lock1" }, { name: "lock2" }, { name: "lock3" }, { name: "lock4" }, { name: "lock5" }, { name: "lock6" }, { name: "lock7" }, { name: "lock8" }]
-
-    // TODO: get scrolling to render bottom section
-    // TODO: Get bg color to work
+    const hardcodedLocks = [{ name: "lock1" }, { name: "lock2" }, { name: "lock3" }, { name: "lock4" }, { name: "lock5" }, { name: "lock6" }, { name: "lock7" }, { name: "lock8" }, { name: "lock9" }]
 
     return (
         <View style={{
-            height: screenHeight,
-            width: screenWidth,
-            backgroundColor: "##3B3C59"
+            backgroundColor: "#3B3C59",
+            justifyContent: "center",
         }}>
-            <FlatList numColumns={2} keyExtractor={item => item.name} data={hardcodedLocks} renderItem={({ item }) => <View style={[styles.box, {flexGrow: 1}]}><Text>{item.name}</Text></View>} />
+            <FlatList numColumns={2} keyExtractor={item => item.name} data={hardcodedLocks} renderItem={({ item }) => <Link href="/lockdetails" asChild style={styles.box}><Pressable><Text style={styles.lockitFont}>{item.name}</Text></Pressable></Link>} />
         </View>
     );
 }
@@ -26,14 +23,14 @@ const styles = StyleSheet.create({
         fontFamily: 'IBM Plex Mono',
         color: 'white',
         textAlign: 'center',
-        fontSize: 20
+        fontSize: 15,
     },
     box: {
         height: 175,
-        width: screenWidth / 2.3,
-        padding: 15,
-        margin: 10,
-        borderWidth: 3,
-        borderColor: "#5864A6",
+        width: screenWidth / 2.2,
+        padding: 10,
+        margin: 9,
+        borderWidth: 2,
+        borderColor: "white",
     }
 });
