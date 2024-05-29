@@ -1,11 +1,20 @@
-import { View, Text, StyleSheet, Dimensions, Button } from "react-native";
+import { View, Text, StyleSheet, Dimensions, Pressable, Button } from "react-native";
 import { CameraView, useCameraPermissions } from 'expo-camera';
-import { useState } from 'react';
+import { DetectedObject } from '@tensorflow-models/coco-ssd';
+import { useRef, useState } from 'react';
+import { CameraCapturedPicture } from 'expo-camera';
+import * as cocoSsd from '@tensorflow-models/coco-ssd';
+import * as tf from '@tensorflow/tfjs';
+import "@tensorflow/tfjs-react-native";
 
 const screenHeight = Dimensions.get('window').height;
 
 export default function TakePictureScreen() {
     const [permission, requestPermission] = useCameraPermissions();
+    const [predictions, setPredictions] = useState<DetectedObject[]>([]);
+    const [data, setData] = useState<undefined | CameraCapturedPicture>();
+    //const camera = useRef(Promise<undefined | CameraCapturedPicture>);
+    const camera = useRef<CameraView | null>(null);
 
     if (!permission) {
         // Camera permissions are still loading.
@@ -27,36 +36,65 @@ export default function TakePictureScreen() {
         );
     }
 
-    return (
-        <View style={{
-            backgroundColor: "#3B3C59",
-            justifyContent: "center",
-            flex: 1
-        }}>
-            <CameraView style={styles.detailsBox}>
-                <Text style={[styles.lockitFont, { textAlign: 'left', marginHorizontal: 20, position: 'absolute', top: 10 }]}>
-                    Looking to detect a lock...
-                </Text>
-            </CameraView>
-        </View>
-    );
-}
+    const predictObject = async (image: HTMLImageElement) => {
+        //TODO: Failed to load model [TypeError: Cannot read property 'fetch' of undefined] 
+        await tf.ready();
+        const model = await cocoSsd.load();
+        model.detect(image).then((predictions: DetectedObject[]) => {
+            setPredictions(predictions);
+            console.log(predictions)
+        })
+            .catch(err => {
+                console.error(err)
+            });
+        // }
+    };
 
-const styles = StyleSheet.create({
-    lockitFont: {
-        fontFamily: 'IBM Plex Mono',
-        color: 'red',
-        textAlign: 'center',
-        fontSize: 15,
-    },
-    detailsBox: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderWidth: 2,
-        borderColor: 'white',
-        backgroundColor: '#5864A6',
-        height: screenHeight - 50,
+    const takePic = async () => {
+        try {
+            const data = await camera.current?.takePictureAsync();
+            setData(data);
+            if (data) {
+                // const image = new Image();
+                // image.src = data.uri;
+                // predictObject(data.uri);
+            }
+        } catch (err) {
+            console.error(err);
+        }
     }
-});
+
+        return (
+            <View style={{
+                backgroundColor: "#3B3C59",
+                justifyContent: "center",
+                flex: 1
+            }}>
+                <CameraView ref={camera} style={styles.detailsBox}>
+                    <Text style={[styles.lockitFont, { textAlign: 'left', marginHorizontal: 20, position: 'absolute', top: 10 }]}>
+                        Looking to detect a lock...
+                    </Text>
+                    <Pressable onPress={takePic} style={{ width: 75, height: 75, backgroundColor: 'transparent', borderRadius: 100, position: 'absolute', bottom: 20, borderWidth: 10, borderColor: 'white' }} />
+                </CameraView>
+            </View>
+        );
+    }
+
+    const styles = StyleSheet.create({
+        lockitFont: {
+            fontFamily: 'IBM Plex Mono',
+            color: 'red',
+            textAlign: 'center',
+            fontSize: 15,
+        },
+        detailsBox: {
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderWidth: 2,
+            borderColor: 'white',
+            backgroundColor: '#5864A6',
+            height: screenHeight - 50,
+        }
+    });

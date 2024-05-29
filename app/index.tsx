@@ -43,7 +43,7 @@ export default function Index() {
                             <MaterialCommunityIcons
                                 name="camera"
                                 size={50}
-                                marginTop={25}
+                                style={{ marginTop: 25 }}
                             />
                         </View>
                     </Pressable>
@@ -55,7 +55,7 @@ export default function Index() {
                             <MaterialCommunityIcons
                                 name="lock"
                                 size={50}
-                                marginTop={25}
+                                style={{ marginTop: 25 }}
                             />
                         </View>
                     </Pressable>
@@ -63,8 +63,8 @@ export default function Index() {
             </View>
             <Text style={[styles.lockitFont]}>Sign in to save your locks!</Text>
             <View style={{ display: "flex", marginTop: 50 }}>
-                <Pressable style={{ borderWidth: 3, paddingVertical: 5, paddingHorizontal: 10, borderColor: 'white', borderRadius: 10, backgroundColor: "#5864A6", margin: 5, flexDirection: "row", alignItems: 'center' }}><MaterialCommunityIcons name="google" size={25} marginRight={15} /><Text style={styles.lockitFont}>Sign in with google</Text></Pressable>
-                <Pressable style={{ borderWidth: 3, paddingVertical: 5, paddingHorizontal: 10, borderColor: 'white', borderRadius: 10, backgroundColor: "#5864A6", margin: 5, flexDirection: "row", alignItems: 'center' }}><MaterialCommunityIcons name="email" size={25} marginRight={15} /><Text style={styles.lockitFont}>Sign in with email</Text></Pressable>
+                <Pressable style={{ borderWidth: 3, paddingVertical: 5, paddingHorizontal: 10, borderColor: 'white', borderRadius: 10, backgroundColor: "#5864A6", margin: 5, flexDirection: "row", alignItems: 'center' }}><MaterialCommunityIcons name="google" size={25} style={{ marginRight: 15 }} /><Text style={styles.lockitFont}>Sign in with google</Text></Pressable>
+                <Pressable style={{ borderWidth: 3, paddingVertical: 5, paddingHorizontal: 10, borderColor: 'white', borderRadius: 10, backgroundColor: "#5864A6", margin: 5, flexDirection: "row", alignItems: 'center' }}><MaterialCommunityIcons name="email" size={25} style={{ marginRight: 15 }} /><Text style={styles.lockitFont}>Sign in with email</Text></Pressable>
             </View>
         </View>
     );

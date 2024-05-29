@@ -5,6 +5,7 @@
         "lockit",
         "mylocks",
         "Pressable",
-        "takepicture"
+        "takepicture",
+        "tfjs"
     ]
 }
