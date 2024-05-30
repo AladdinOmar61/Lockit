@@ -112,6 +112,8 @@ import {
     View
 } from "react-native";
 
+import RNFS from 'react-native-fs';
+
 import * as tf from "@tensorflow/tfjs";
 import "@tensorflow/tfjs-react-native";
 
@@ -124,8 +126,6 @@ import * as ImageManipulator from "expo-image-manipulator";
 import { DetectedObject } from '@tensorflow-models/coco-ssd';
 
 import { fetch } from "@tensorflow/tfjs-react-native";
-
-//TODO: Fix Network request failed error
 
 export default function DetectObjectsScreen() {
     const [isTfReady, setIsTfReady] = useState(false);
@@ -180,16 +180,19 @@ export default function DetectObjectsScreen() {
         return tf.tensor3d(buffer, [height, width, 3]);
     };
 
+    //TODO: Fix Network request failed error
+
     const detectObjectsAsync = async (source: any) => {
         try {
             const imageAssetPath = Image.resolveAssetSource(source);
-            if (imageAssetPath.uri.startsWith('http')) {
-                console.log('URL starts with http');
+            let rawImageData;
+            if (imageAssetPath.uri.startsWith('file://')) {
+                rawImageData = await RNFS.readFile(imageAssetPath.uri, 'base64');
+                rawImageData = new Uint8Array(atob(rawImageData).split('').map(char => char.charCodeAt(0)));
             } else {
-                console.log('URL does not start with http');
+                const response = await fetch(imageAssetPath.uri, {});
+                rawImageData = new Uint8Array(await response.arrayBuffer());
             }
-            const response = await fetch(imageAssetPath.uri, {});
-            const rawImageData = await response.arrayBuffer();
             const imageTensor = imageToTensor(rawImageData);
             if (model.current) {
                 const newPredictions = await model.current.detect(imageTensor);
@@ -198,7 +201,7 @@ export default function DetectObjectsScreen() {
                 console.log(newPredictions);
             }
         } catch (error) {
-            console.log("Exception Error: ", error);
+            console.error('Error in detectObjectsAsync:', error);
         }
     };
 
