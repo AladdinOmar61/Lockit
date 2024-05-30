@@ -125,13 +125,13 @@ import { DetectedObject } from '@tensorflow-models/coco-ssd';
 
 import { fetch } from "@tensorflow/tfjs-react-native";
 
-//import { Text, View } from "../components/Themed";
+//TODO: Fix Network request failed error
 
 export default function DetectObjectsScreen() {
     const [isTfReady, setIsTfReady] = useState(false);
     const [isModelReady, setIsModelReady] = useState(false);
     const [predictions, setPredictions] = useState<DetectedObject[]>([]);
-    const [imageToAnalyze, setImageToAnalyze] = useState(null);
+    const [imageToAnalyze, setImageToAnalyze] = useState<{ uri: string } | null>(null);
     const model = useRef<null | cocossd.ObjectDetection>(null);
 
     useEffect(() => {
@@ -166,7 +166,7 @@ export default function DetectObjectsScreen() {
             useTArray: true,
         }); // return as Uint8Array
 
-        // Drop the alpha channel info for mobilenet
+        // Drop the alpha channel info for mobile net
         const buffer = new Uint8Array(width * height * 3);
         let offset = 0; // offset into original data
         for (let i = 0; i < buffer.length; i += 3) {
@@ -183,7 +183,12 @@ export default function DetectObjectsScreen() {
     const detectObjectsAsync = async (source: any) => {
         try {
             const imageAssetPath = Image.resolveAssetSource(source);
-            const response = await fetch(imageAssetPath.uri, {}, { isBinary: true });
+            if (imageAssetPath.uri.startsWith('http')) {
+                console.log('URL starts with http');
+            } else {
+                console.log('URL does not start with http');
+            }
+            const response = await fetch(imageAssetPath.uri, {});
             const rawImageData = await response.arrayBuffer();
             const imageTensor = imageToTensor(rawImageData);
             if (model.current) {
@@ -205,22 +210,22 @@ export default function DetectObjectsScreen() {
                 aspect: [4, 3],
             });
 
-            console.log(response)
+            console.log(response);
 
-            // if (!response.canceled) {
-            //     // resize image to avoid out of memory crashes
-            //     const manipResponse = await ImageManipulator.manipulateAsync(
-            //         response?.uri,
-            //         [{ resize: { width: 900 } }],
-            //         { compress: 1, format: ImageManipulator.SaveFormat.JPEG }
-            //     );
+            if (!response.canceled) {
+                // resize image to avoid out of memory crashes
+                const manipResponse = await ImageManipulator.manipulateAsync(
+                    response?.assets && response.assets[0]?.uri,
+                    [{ resize: { width: 900 } }],
+                    { compress: 1, format: ImageManipulator.SaveFormat.JPEG }
+                );
 
-            //     const source = { uri: manipResponse.uri };
-            //     setImageToAnalyze(source);
-            //     // console.log(manipResponse);
-            //     setPredictions([]);
-            //     await detectObjectsAsync(source);
-            // }
+                const source = { uri: manipResponse.uri };
+                setImageToAnalyze(source);
+                // console.log(manipResponse);
+                setPredictions([]);
+                await detectObjectsAsync(source);
+            }
         } catch (error) {
             console.log(error);
         }
