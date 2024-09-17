@@ -1,13 +1,14 @@
 import { Text, View, StyleSheet, Pressable, Dimensions, FlatList } from "react-native";
 import { Link } from 'expo-router';
 import { transform } from "@babel/core";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 export default function MylocksScreen() {
 
-    const hardcodedLocks = []
+    const hardcodedLocks: Array<any> | null = [{name: "lock1"}]
 
     return (
         <View style={{
@@ -20,9 +21,9 @@ export default function MylocksScreen() {
             ) : (
                 <Text style={styles.lockitFont}>You have no locks registered!</Text>
             )}
-            <Pressable style={styles.addLock}><Text style={styles.plus}>+</Text></Pressable>
+            <Pressable style={styles.addLock}><Link href="/createlock"><MaterialCommunityIcons name="plus" size={40}/></Link></Pressable>
         </View>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
@@ -50,6 +51,7 @@ const styles = StyleSheet.create({
         bottom: 40,
         right: 40,
         backgroundColor: 'white',
+        display: 'flex',
         justifyContent: "center",
         alignItems: 'center',
     },

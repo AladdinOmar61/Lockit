@@ -20,6 +20,11 @@ export default function RootLayout() {
           color: 'white', fontFamily: 'IBM Plex Mono'
         }
       }} />
+      <Stack.Screen name="createlock" options={{
+        headerTitle: "Create a new lock", headerTintColor: 'white', statusBarColor: "#3B3C59", headerStyle: { backgroundColor: "#3B3C59" }, headerTitleStyle: {
+          color: 'white', fontFamily: 'IBM Plex Mono'
+        }
+      }} />
     </Stack>
   );
 }
