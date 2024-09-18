@@ -41,9 +41,9 @@ export default function Index() {
                         <View style={{ display: 'flex', alignItems: 'center' }}>
                             <Text style={[styles.lockitFont, { marginTop: 15 }]}>Take picture</Text>
                             <MaterialCommunityIcons
+                                style={{ marginTop: 25 }}
                                 name="camera"
                                 size={50}
-                                marginTop={25}
                                 color={"white"}
                             />
                         </View>
@@ -56,7 +56,7 @@ export default function Index() {
                             <MaterialCommunityIcons
                                 name="lock"
                                 size={50}
-                                marginTop={25}
+                                style={{ marginTop: 25 }}
                                 color={"white"}
                             />
                         </View>
